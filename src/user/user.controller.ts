@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from './dto/createUserDto';
 import { UserService } from './user.service';
 import { CommentService } from 'src/comment/comment.service';
+import { JwtGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -19,6 +20,8 @@ export class UserController {
         return this.userService.create(createUserDto);
     }
 
+
+    @UseGuards(JwtGuard)
     @Get(":id/comments")
     getUserComment(@Param('id') id:string){
         return this.commentService.findUSerComment(id);
